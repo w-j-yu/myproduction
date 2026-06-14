@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个人项目作品集</title>
+<style>
+  :root {
+    --bg: #f8f9fa; --card: #ffffff; --border: #e2e6ea;
+    --accent: #5c6bc0; --accent2: #42a5f5; --accent3: #55a868; --accent4: #e08a2a;
+    --text: #212529; --muted: #6c757d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+  .hero {
+    background: linear-gradient(135deg, #eef0fb 0%, #f0f7ff 60%, #f8f9fa 100%);
+    padding: 80px 24px 60px; text-align: center; border-bottom: 1px solid var(--border);
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(92,107,192,0.1) 0%, transparent 70%);
+    top: -200px; left: 50%; transform: translateX(-50%); pointer-events: none;
+  }
+  .badge { display: inline-block; background: rgba(92,107,192,0.1); border: 1px solid rgba(92,107,192,0.3); color: var(--accent); font-size: 13px; padding: 4px 14px; border-radius: 20px; margin-bottom: 20px; letter-spacing: 0.5px; }
+  .hero h1 { font-size: clamp(28px, 5vw, 48px); font-weight: 700; letter-spacing: -0.5px; margin-bottom: 12px; }
+  .hero h1 span { color: var(--accent); }
+  .hero .sub { font-size: 16px; color: var(--muted); max-width: 520px; margin: 0 auto 32px; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .tag { background: rgba(0,0,0,0.04); border: 1px solid var(--border); padding: 4px 12px; border-radius: 20px; font-size: 12px; color: var(--muted); }
+
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(248,249,250,0.95); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border); padding: 0 24px;
+    display: flex; overflow-x: auto; scrollbar-width: none;
+  }
+  nav a { display: block; padding: 14px 16px; font-size: 13px; color: var(--muted); text-decoration: none; white-space: nowrap; transition: color 0.2s; border-bottom: 2px solid transparent; }
+  nav a:hover { color: var(--text); border-bottom-color: var(--accent); }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+  section { padding: 64px 0; border-bottom: 1px solid var(--border); }
+  section:last-child { border-bottom: none; }
+
+  .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); margin-bottom: 8px; font-weight: 600; }
+  .section-title { font-size: clamp(22px, 3vw, 30px); font-weight: 700; margin-bottom: 8px; }
+  .section-desc { color: var(--muted); font-size: 15px; margin-bottom: 40px; }
+
+  .project-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; margin-bottom: 24px; transition: border-color 0.2s, transform 0.2s; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .project-card:hover { border-color: rgba(92,107,192,0.4); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(92,107,192,0.1); }
+  .card-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
+  .card-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+  .card-meta { flex: 1; }
+  .card-status { display: inline-block; font-size: 11px; padding: 2px 10px; border-radius: 20px; margin-bottom: 6px; font-weight: 500; }
+  .status-done   { background: rgba(85,168,104,0.12); color: #3d8b57; border: 1px solid rgba(85,168,104,0.3); }
+  .status-wip    { background: rgba(224,138,42,0.12);  color: #b5691a; border: 1px solid rgba(224,138,42,0.3); }
+  .status-course { background: rgba(66,165,245,0.12);  color: #1976d2; border: 1px solid rgba(66,165,245,0.3); }
+  .card-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .card-tagline { font-size: 13px; color: var(--muted); }
+  .card-body p { font-size: 14px; color: #495057; margin-bottom: 16px; }
+
+  .problem-box { background: rgba(92,107,192,0.05); border-left: 3px solid var(--accent); padding: 12px 16px; border-radius: 0 8px 8px 0; margin-bottom: 20px; font-size: 14px; color: #495057; }
+  .problem-box strong { color: var(--accent); display: block; margin-bottom: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+
+  .tech-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+  .tech-tag { background: rgba(92,107,192,0.07); border: 1px solid rgba(92,107,192,0.2); color: var(--accent); padding: 3px 10px; border-radius: 6px; font-size: 12px; font-family: 'SF Mono', 'Consolas', monospace; }
+
+  .feature-list { list-style: none; margin-bottom: 20px; }
+  .feature-list li { font-size: 14px; color: #495057; padding: 4px 0 4px 20px; position: relative; }
+  .feature-list li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-size: 12px; }
+
+  .card-footer { display: flex; flex-wrap: wrap; gap: 10px; padding-top: 20px; border-top: 1px solid var(--border); align-items: center; }
+  .highlight-badge { background: rgba(224,138,42,0.1); border: 1px solid rgba(224,138,42,0.25); color: var(--accent4); padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+  .score-row { margin-left: auto; display: flex; gap: 16px; }
+  .score-item { text-align: center; }
+  .score-val { font-size: 22px; font-weight: 700; color: var(--accent); }
+  .score-label { font-size: 11px; color: var(--muted); }
+
+  .pipeline-box { background: #f1f3f5; border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin-bottom: 20px; font-family: 'SF Mono', 'Consolas', monospace; font-size: 13px; color: #495057; line-height: 2; }
+  .pipeline-box .ai-step { color: var(--accent); font-weight: 600; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+  .mini-card { background: #f8f9fa; border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+  .mini-card-title { font-size: 12px; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+  .mini-card-val { font-size: 15px; color: var(--text); font-weight: 500; }
+
+  .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+  .tool-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; transition: border-color 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+  .tool-card:hover { border-color: rgba(66,165,245,0.5); }
+  .tool-card.dim { opacity: 0.5; }
+  .tool-icon { font-size: 28px; margin-bottom: 10px; }
+  .tool-name { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .tool-desc { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+  .tool-status { font-size: 11px; padding: 2px 8px; border-radius: 10px; display: inline-block; }
+  .ts-done { background: rgba(85,168,104,0.1); color: #3d8b57; }
+  .ts-wip  { background: rgba(224,138,42,0.1); color: #b5691a; }
+  .ts-skip { background: rgba(0,0,0,0.05); color: var(--muted); }
+
+  /* 截图展示样式 */
+  .screenshot-wrapper {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, rgba(92,107,192,0.04) 0%, rgba(66,165,245,0.04) 100%);
+    border: 1px dashed var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .screenshot-wrapper img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .screenshot-placeholder-text {
+    font-size: 12px;
+    color: var(--muted);
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+    padding: 0 16px;
+  }
+  .screenshot-placeholder-text span:first-child { font-size: 20px; margin-bottom: 2px; }
+
+  /* 技能卡片重构（去除进度条，采用精致标签流） */
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .skill-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); display: flex; flex-direction: column; gap: 14px; }
+  .skill-title { font-size: 14px; font-weight: 700; color: var(--text); border-left: 3px solid var(--accent); padding-left: 10px; line-height: 1.2; }
+  .skill-list { display: flex; flex-direction: column; gap: 8px; }
+  .skill-item { background: #f8f9fa; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; }
+  .skill-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .skill-badge { font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 500; flex-shrink: 0; white-space: nowrap; }
+  .sb-core { background: rgba(85,168,104,0.1); color: #3d8b57; border: 1px solid rgba(85,168,104,0.2); }
+  .sb-active { background: rgba(92,107,192,0.1); color: var(--accent); border: 1px solid rgba(92,107,192,0.2); }
+  .sb-familiar { background: rgba(66,165,245,0.1); color: #1976d2; border: 1px solid rgba(66,165,245,0.2); }
+
+  .story-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .story-card p { font-size: 15px; color: #495057; margin-bottom: 16px; }
+  .story-card p:last-child { margin-bottom: 0; }
+  .quote { background: rgba(92,107,192,0.06); border-left: 3px solid var(--accent); padding: 16px 20px; border-radius: 0 8px 8px 0; font-size: 16px; color: var(--text); font-style: italic; margin: 20px 0; }
+
+  .story-items { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 20px; }
+  .story-item { background: #f8f9fa; border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+  .story-item .emoji { font-size: 22px; margin-bottom: 8px; }
+  .story-item .si-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .story-item .si-desc { font-size: 12px; color: var(--muted); }
+
+  footer { background: var(--card); border-top: 1px solid var(--border); padding: 40px 24px; text-align: center; }
+  footer .f-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  footer .f-sub { font-size: 14px; color: var(--muted); margin-bottom: 16px; }
+
+  @media (max-width: 600px) { .card-header { flex-direction: column; } .score-row { margin-left: 0; } .project-card { padding: 20px; } }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="badge">个人项目作品集</div>
+  <h1>用 AI <span>构建真实需要产品</span></h1>
+  <p class="sub">项目来自真实需求，从实际结果测试，让生活更美好</p>
+  <div class="tag-row">
+    <span class="tag">Java Spring Boot</span>
+    <span class="tag">微信小程序</span>
+    <span class="tag">Python 自动化</span>
+    <span class="tag">AI 大模型集成</span>
+    <span class="tag">阿里云百炼</span>
+    <span class="tag">Vue.js</span>
+    <span class="tag">Anki 卡片生成</span>
+    <span class="tag">Obsidian 知识库</span>
+  </div>
+</div>
+
+<!-- Nav -->
+<nav>
+  <a href="#collector">知识收藏器</a>
+  <a href="#pet">宠物推荐系统</a>
+  <a href="#anki">英语学习系统</a>
+  <a href="#miniprogram">健康小程序</a>
+  <a href="#tools">HTML 工具集</a>
+  <a href="#skills">技能概览</a>
+  <a href="#story">关于我</a>
+</nav>
+
+<!-- 01 Collector -->
+<section id="collector">
+  <div class="container">
+    <div class="section-label">Project 01 · 多平台工具</div>
+    <div class="section-title">AI 内容知识收藏器</div>
+    <p class="section-desc">把碎片化内容变成可检索的结构化知识库 — 不只是收藏</p>
+
+    <div class="project-card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(124,106,247,0.15)">📚</div>
+        <div class="card-meta">
+          <div class="card-status status-done">✓ 功能完整 · v3.3</div>
+          <div class="card-title">Collector — 多平台 AI 知识收藏器</div>
+          <div class="card-tagline">粘贴链接 → AI 分析 → 自动入库 Obsidian</div>
+        </div>
+      </div>
+
+
+
+      <div class="problem-box">
+        <strong>起源</strong>
+        作为某电商公司 AI 应用岗的面试作业开始开发，完成后发现确实解决了自己的问题，
+        便持续迭代至 v3.3，功能已远超原始作业要求。
+      </div>
+
+      <div class="card-body">
+        <p>Java Spring Boot 本地工具，自动抓取微信公众号文章、B 站视频、豆瓣影评、知乎回答，
+        通过阿里云千问 AI 生成摘要、核心结论、分类标签，写入 Obsidian 知识库。
+        有 Web 界面，支持图文内容的独立处理。</p>
+      </div>
+
+      <div class="tech-row">
+        <span class="tech-tag">Java 17</span>
+        <span class="tech-tag">Spring Boot 3.5</span>
+        <span class="tech-tag">Jsoup 1.17</span>
+        <span class="tech-tag">阿里云百炼 qwen-plus</span>
+        <span class="tech-tag">qwen-vl-plus（图片）</span>
+        <span class="tech-tag">Obsidian Vault</span>
+        <span class="tech-tag">Web UI</span>
+      </div>
+
+      <ul class="feature-list">
+        <li>多平台支持：微信公众号、B站、豆瓣、GitHub（书签脚本）</li>
+        <li>AI 输出：核心结论一句话、200字摘要、关键词、分类自动判断</li>
+        <li>质量评分 1-5 分，quality=1 的内容自动跳过，不写入知识库</li>
+        <li>Obsidian 双链自动更新、分类内容地图自动生成</li>
+        <li>剪贴板监控：复制微信链接自动触发处理流程</li>
+        <li>支持批量重新导入、笔记审计、历史记录管理</li>
+      </ul>
+
+      <div class="card-footer">
+        <span class="highlight-badge">📌 从面试作业出发，持续迭代的实用工具</span>
+        <div class="score-row">
+          <div class="score-item"><div class="score-val">4+</div><div class="score-label">支持平台</div></div>
+          <div class="score-item"><div class="score-val">v3.3</div><div class="score-label">当前版本</div></div>
+          <div class="score-item"><div class="score-val">6类</div><div class="score-label">自动分类</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 Pet -->
+<section id="pet">
+  <div class="container">
+    <div class="section-label">Project 02 · 毕业设计</div>
+    <div class="section-title">宠物个性化推荐系统</div>
+    <p class="section-desc">基于策略模式的 AI 混合推荐引擎，带六维健康画像与三级权限体系</p>
+
+    <div class="project-card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(79,195,247,0.15)">🐾</div>
+        <div class="card-meta">
+          <div class="card-status status-done"> ✓ 核心功能已跑通 </div>
+          <div class="card-title">基于 Spring Boot 的宠物推荐系统 · AI 混合推荐引擎</div>
+          <div class="card-tagline">项目组长 · 前后端分离 · 多维档案 + 个性化推荐</div>
+        </div>
+      </div>
+
+      <div class="problem-box">
+        <strong>设计目标</strong>
+        用户为宠物建立多维健康档案，系统依据档案实现个性化用品推荐，
+        覆盖冷启动场景，推荐结果可视化呈现，接口具备异常降级能力。
+      </div>
+
+      <div class="tech-row">
+        <span class="tech-tag">Java Spring Boot</span>
+        <span class="tech-tag">MySQL</span>
+        <span class="tech-tag">Vue.js</span>
+        <span class="tech-tag">Spring Security + BCrypt</span>
+        <span class="tech-tag">SpringDoc OpenAPI</span>
+        <span class="tech-tag">ECharts</span>
+        <span class="tech-tag">Token 机制</span>
+        <span class="tech-tag">Claude / Gemini 辅助设计</span>
+      </div>
+
+      <ul class="feature-list">
+        <li>策略模式推荐算法框架，测试环境下推荐采纳率较初期提升约 20%</li>
+        <li>六维健康画像模型（消化 / 活力 / 皮毛 / 情绪 / 免疫 / 体态），ECharts 雷达图可视化</li>
+        <li>冷启动处理 + 异常降级：推荐接口在无结果时自动返回兜底数据</li>
+        <li>Spring Security + BCrypt 密码存储，游客 / 用户 / 管理员三级权限体系</li>
+        <li>SpringDoc OpenAPI 管理接口契约，覆盖 15+ 维数据模型，前后端开发一致性保障</li>
+        <li>本地测试 1000 条数据量，接口响应约 100ms；优化了协同过滤（CF）策略中的 N+1 查询问题</li>
+        <li>全流程：多宠物档案管理 + 推荐 + 结果可视化均已完成</li>
+      </ul>
+
+      <div class="card-footer">
+        <span class="highlight-badge">🎓 毕业设计 · 项目组长</span>
+        <span class="highlight-badge">🤖 AI 辅助开发，模块交付效率提升约 40%</span>
+        <div class="score-row">
+          <div class="score-item"><div class="score-val">6维</div><div class="score-label">健康画像</div></div>
+          <div class="score-item"><div class="score-val">3级</div><div class="score-label">权限体系</div></div>
+          <div class="score-item"><div class="score-val">~100ms</div><div class="score-label">接口响应</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 Anki -->
+<section id="anki">
+  <div class="container">
+    <div class="section-label">Project 03 · 个人工具</div>
+    <div class="section-title">英剧 Anki 卡片生成系统</div>
+    <p class="section-desc">字幕 + 视频 → AI 筛选生成卡片 → FFmpeg 剪片 → Anki 导入，在用不是 demo</p>
+
+    <div class="project-card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(129,199,132,0.15)">🎬</div>
+        <div class="card-meta">
+          <div class="card-status status-done">✓ 运行中 · 多剧集已处理</div>
+          <div class="card-title">英剧 Anki 视频卡片自动生成流水线</div>
+          <div class="card-tagline">Python + AI + FFmpeg · 真实在用，非演示</div>
+        </div>
+      </div>
+
+      <div class="problem-box">
+        <strong>真实需求</strong>
+        具备读写能力但听说能力弱，想用原版英剧学习，普通字幕学习效率低。
+        需要能自动提取高价值句子、生成视频片段、配上填空题的 Anki 卡片。
+      </div>
+
+      <div class="pipeline-box">
+字幕文件(.ass) + 原视频(4K .mkv)
+  ↓ subtitle_parser.py — 解析时间戳与文本
+  <span class="ai-step">↓ anki_agent.py + AI — 筛选高学习价值句子，生成填空题 + 词源解释  ← AI 用在这里</span>
+  ↓ make_video_cards.py + FFmpeg — 按时间戳自动剪切视频片段
+  ↓ 合并文字卡片 + 视频引用
+导入 Anki（.apkg）→ 正面自动播放视频 + 场景描述 + 填空，背面答案 + 词源
+      </div>
+
+      <div class="two-col">
+        <div class="mini-card">
+          <div class="mini-card-title">已处理剧集</div>
+          <div class="mini-card-val">英剧 S01+S02（全12集）<br>系列类型 S01-S03（多集）</div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-title">卡片分类设计</div>
+          <div class="mini-card-val">A类：习语表达<br>B类：口语结构<br>C类：文学句式</div>
+        </div>
+      </div>
+
+      <ul class="feature-list">
+        <li>AI 只负责"语义理解"这一步：筛选句子 + 生成卡片文字，其余步骤全部脚本实现</li>
+        <li>从单集脚本迭代为通用框架（make_video_cards_universal.py），可适配任意剧集</li>
+        <li>新剧集配置只需改 2 行参数（集数 + 字幕路径），其余自动处理</li>
+        <li>已扩展至日语学习（部分生成完成，因视频片段时长优化问题暂缓迭代）</li>
+        <li>有 .apkg 实际导入 Anki 在用，S01E01 已生成 56 张视频卡片</li>
+      </ul>
+
+      <div class="card-footer">
+        <span class="highlight-badge">💡 AI 用在刀刃上：在需要语义理解的步骤调用</span>
+        <div class="score-row">
+          <div class="score-item"><div class="score-val">12+</div><div class="score-label">已处理集数</div></div>
+          <div class="score-item"><div class="score-val">2行</div><div class="score-label">配置新剧集</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 Mini Program -->
+<section id="miniprogram">
+  <div class="container">
+    <div class="section-label">Project 04 · 个人开发中</div>
+    <div class="section-title">围绝经期女性健康助手</div>
+    <p class="section-desc">让中老年女性就诊前有备而来 — 来自家庭生活观察的设计</p>
+
+    <div class="project-card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(255,183,77,0.15)">🏥</div>
+        <div class="card-meta">
+          <div class="card-status status-done"> ✓ 业务逻辑已跑通 </div>
+          <div class="card-title">微信小程序 · 围绝经期健康助手</div>
+          <div class="card-tagline">中医十问框架 + AI 生成就诊材料</div>
+        </div>
+      </div>
+
+
+
+      <div class="problem-box">
+        <strong>选题来源</strong>
+        陪家人就诊时发现她在诊室说不出症状——"在家能说，到医院就不知道该怎么讲"。
+        这个细节指向了产品方向：帮用户在就诊前把要说的话整理好。
+      </div>
+
+      <div class="tech-row">
+        <span class="tech-tag">微信小程序</span>
+        <span class="tech-tag">微信云开发 CloudBase</span>
+        <span class="tech-tag">Node.js 云函数</span>
+        <span class="tech-tag">混元 AI</span>
+      </div>
+
+      <ul class="feature-list">
+        <li>Scene 1 就诊前：用户填写症状档案 → AI 生成"患者陈述"+ 医生提问清单</li>
+        <li>Scene 2 每日打卡：AI 根据当日状态给出建议与预警提示</li>
+        <li>Scene 3 就诊后：录入医嘱 → AI 生成个性化调理方案（饮食/运动/禁忌/复查节点）</li>
+        <li>Prompt 三层架构：角色约束 + 用户画像 Context + 场景化任务指令</li>
+        <li>当前状态：云函数逻辑已完成，AI 接口对接调试中</li>
+      </ul>
+
+      <div class="card-footer">
+        <span class="highlight-badge">💬 来自真实观察，不是想象的需求</span>
+        <div class="score-row">
+          <div class="score-item"><div class="score-val">3</div><div class="score-label">核心场景</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 Tools -->
+<section id="tools">
+  <div class="container">
+    <div class="section-label">Project 05 · HTML 工具集</div>
+    <div class="section-title">单页工具：解决自己的具体问题</div>
+    <p class="section-desc">零依赖、即开即用，每个都来自真实的、反复遇到的小问题</p>
+
+    <div class="project-card" style="margin-bottom:24px">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(255,183,77,0.15)">💰</div>
+        <div class="card-meta">
+          <div class="card-status status-done">✓ 真实在用 · 有踩坑文档</div>
+          <div class="card-title">日常预算记录 App</div>
+          <div class="card-tagline">手机电脑浏览器本地运行 · localStorage 存储 · 无需后端</div>
+        </div>
+      </div>
+
+      
+
+      <div class="card-body">
+        <p>纯 HTML 单文件记账应用，主要在手机电脑浏览器上使用。
+        功能不复杂，但开发过程中踩了不少坑，这些坑变成了可复用的认知：</p>
+      </div>
+      <ul class="feature-list">
+        <li>发现 QQ 浏览器对 Blob URL 下载会静默改为预览而非下载，排查耗时最长</li>
+        <li>发现 clipboard.writeText 不需要权限，但 clipboard.readText 需要用户授权——同是"剪贴板"，权限模型完全不同</li>
+        <li>导出 toast 改为"✓ 已复制（共 47 条记录）"——数字建立信任感，比"操作成功"有效</li>
+        <li>导入确认框显示"检测到 12 天、共 47 条记录，确认合并？"——让用户自己核对数字</li>
+        <li>本地导出/导入方案（无云同步），跨设备需要手动操作</li>
+      </ul>
+      <div class="card-footer">
+        <span class="highlight-badge">📖 完整踩坑记录已整理成可复用的知识框架</span>
+      </div>
+    </div>
+
+    <div class="tool-grid">
+      <div class="tool-card">
+        <div class="tool-icon">🔍</div>
+        <div class="tool-name">手写单据 OCR</div>
+        <div class="tool-desc">识别手写商品单号和金额，带颜色标注，识别率约 80-90%。解决手写单据数字核对问题。</div>
+        <div class="tool-status ts-done">可用</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">🤖</div>
+        <div class="tool-name">AI 协作诊断器</div>
+        <div class="tool-desc">把问题描述发给它，返回诊断建议。方向级问题有效，细节级问题还在完善中。</div>
+        <div class="tool-status ts-wip">迭代中</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">✏️</div>
+        <div class="tool-name">语音输入润色</div>
+        <div class="tool-desc">解决语音转文字后的混乱语句，能达到 90% 效果。后发现通用 AI 也能处理，使用频率降低。</div>
+        <div class="tool-status ts-done">可用 · 已有替代</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">📱</div>
+        <div class="tool-name">App 原型生成器</div>
+        <div class="tool-desc">描述需求 → 生成 HTML 原型。框架结构能生成，交互细节尚不完整。</div>
+        <div class="tool-status ts-wip">原型级别</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Skills -->
+<section id="skills">
+  <div class="container">
+    <div class="section-label">技能概览 · Skills</div>
+    <div class="section-title">能做什么，不做什么</div>
+    <p class="section-desc">核心能力不是写代码，是判断什么该做、用什么工具做、做完了对不对</p>
+
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-title">后端开发 Backend</div>
+        <div class="skill-list">
+          <div class="skill-item">
+            <span class="skill-name">Java / Spring Boot</span>
+            <span class="skill-badge sb-core">核心落地</span>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">Node.js 云开发</span>
+            <span class="skill-badge sb-active">跑通闭环</span>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">MySQL 数据库设计</span>
+            <span class="skill-badge sb-familiar">项目在用</span>
+          </div>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-title">前端 / 小程序 Frontend</div>
+        <div class="skill-list">
+          <div class="skill-item">
+            <span class="skill-name">HTML / CSS / JS</span>
+            <span class="skill-badge sb-core">核心落地</span>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">微信小程序开发</span>
+            <span class="skill-badge sb-active">跑通闭环</span>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">Python 自动化脚本</span>
+            <span class="skill-badge sb-familiar">项目在用</span>
+          </div>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-title">AI 协作与大模型集成 AI Integration</div>
+        <div class="skill-list">
+          <div class="skill-item">
+            <span class="skill-name">大模型 API 对接</span>
+            <span class="skill-badge sb-core">核心落地</span>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">AI 辅助开发流程</span>
+            <span class="skill-badge sb-core">核心落地</span>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">提示词与架构设计</span>
+            <span class="skill-badge sb-active">项目在用</span>
+          </div>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-title">产品闭环与交付能力 Product Mindset</div>
+        <div class="skill-list">
+          <div class="skill-item">
+            <span class="skill-name">痛点识别场景定义</span>
+            <span class="skill-badge sb-core">核心落地</span>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">真机调试与复盘</span>
+            <span class="skill-badge sb-core">核心落地</span>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">降级容错体验设计</span>
+            <span class="skill-badge sb-active">项目在用</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+<section id="story">
+  <div class="container">
+    <div class="section-label">关于我 · About</div>
+    <div class="section-title">每个项目背后的真实原因</div>
+
+    <div class="story-card">
+      <div class="quote">"每一个版本的迭代来自对现实遇到的困难和优化，AI无法解决真实需求问题。<br>每一次现实反馈是对 AI 设计的补充经验。"</div>
+      <p>我的工作方式是：定义目标、真机测试、识别偏差、做产品判断，代码由 AI 实现。在这过程中优化自身设计与学习方法。</p>
+
+      <div class="story-items">
+        <div class="story-item">
+          <div class="emoji">📚</div>
+          <div class="si-title">知识收藏器</div>
+          <div class="si-desc">在面试期间，发现是现实中同样需要的真实问题，于是持续迭代优化补充</div>
+        </div>
+        <div class="story-item">
+          <div class="emoji">🐾</div>
+          <div class="si-title">宠物推荐系统</div>
+          <div class="si-desc">毕业设计，用 Claude/Gemini 辅助需求拆解，模块交付效率提升约 40%</div>
+        </div>
+        <div class="story-item">
+          <div class="emoji">🎬</div>
+          <div class="si-title">Anki 生成系统</div>
+          <div class="si-desc">拥有读写能力但听说弱，不满足于传统学习方法，个性化定制学习卡片</div>
+        </div>
+        <div class="story-item">
+          <div class="emoji">🏥</div>
+          <div class="si-title">健康小程序</div>
+          <div class="si-desc">陪家人就诊，发现她在诊室说不出症状，这个细节变成了选题</div>
+        </div>
+        <div class="story-item">
+          <div class="emoji">💰</div>
+          <div class="si-title">记账 App</div>
+          <div class="si-desc">自己在手机上用，遇到 QQ 浏览器的 bug，排查过程变成了知识文档</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="f-title">产品型 AI 应用开发者</div>
+    <div class="f-sub">产品判断力 · 真机测试 · AI 协作</div>
+    <div class="tag-row" style="justify-content:center">
+      <span class="tag">知识收藏器</span>
+      <span class="tag">宠物推荐系统</span>
+      <span class="tag">英语 Anki 系统</span>
+      <span class="tag">健康小程序</span>
+      <span class="tag">HTML 工具集</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
